@@ -1,6 +1,10 @@
 import customtkinter as ctk
-from user_frames import MainFrame, AddRecipeFrame, ShowRecipeFrame, UserProfileFrame
-from classes import User
+from pathlib import Path
+
+from app.windows.user.user_frames import MainFrame, AddRecipeFrame, ShowRecipeFrame, UserProfileFrame
+from app.classes import User
+
+ICON_PATH = Path(__file__).resolve().parent.parent.parent / "images/icon.ico"
 
 # Основное окно приложения
 class MainApp(ctk.CTk):
@@ -11,7 +15,7 @@ class MainApp(ctk.CTk):
 
         self.geometry(f"1280x720+100+100")   # Standard size 600x400
         self.title("TastyHub")
-        self.iconbitmap("images/icon.ico")
+        self.iconbitmap(ICON_PATH)
         self.resizable(width=False, height=False)
         # Create the main frame
         self.main_frame = MainFrame(self)
@@ -66,4 +70,4 @@ class MainApp(ctk.CTk):
             frame.destroy()
         self.frames = {}
 
-# MainApp().mainloop()
+MainApp().mainloop()

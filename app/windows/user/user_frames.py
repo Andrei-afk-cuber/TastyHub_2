@@ -1,9 +1,9 @@
 import customtkinter as ctk
-from login.config import theme
+from app.windows.login.config import theme
 from tkinter import messagebox, filedialog
-from classes import Recipe, RecipeCard
+from app.classes import Recipe, RecipeCard
 from PIL import Image, ImageTk
-from functions import save_recipe, load_recipes, update_recipe_by_id, EditableRecipeCard
+from app.functions import save_recipe, load_recipes, update_recipe_by_id, EditableRecipeCard
 import os
 
 # Класс основного фрейма приложения

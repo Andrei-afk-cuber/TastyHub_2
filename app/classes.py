@@ -1,5 +1,4 @@
 import customtkinter as ctk
-from login.config import*
 import os
 from PIL import ImageTk, Image
 

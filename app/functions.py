@@ -1,11 +1,11 @@
 import sqlite3
 import os
 import shutil
-from classes import Recipe, User
+from app.classes import Recipe, User
 from tkinter import messagebox
-from PIL import Image, ImageTk
+from PIL import Image
 import customtkinter as ctk
-from login.config import theme
+from app.windows.login.config import theme
 import socket
 import json
 import datetime

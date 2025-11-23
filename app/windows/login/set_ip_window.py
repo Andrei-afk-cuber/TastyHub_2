@@ -1,7 +1,7 @@
 import re
 import customtkinter as ctk
 from tkinter import messagebox
-from login.config import theme
+from app.windows.login.config import theme
 
 
 class SetIpWindow(ctk.CTk):

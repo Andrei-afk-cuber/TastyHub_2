@@ -1,7 +1,7 @@
 import customtkinter as ctk
-from admin_frames import MainFrame
-from classes import User
-from user_frames import AddRecipeFrame
+from app.windows.admin.admin_frames import MainFrame
+from app.classes import User
+from app.windows.user.user_frames import AddRecipeFrame
 
 # Основное окно приложения
 class MainApp(ctk.CTk):

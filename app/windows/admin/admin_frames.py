@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from customtkinter import CTkLabel
-from login.config import theme
-from functions import load_users, load_recipes, AdminRecipeCard, UserCard
+from app.windows.login.config import theme
+from app.functions import load_users, load_recipes, AdminRecipeCard, UserCard
 
 # Класс основного фрейма приложения
 class MainFrame(ctk.CTkFrame):
