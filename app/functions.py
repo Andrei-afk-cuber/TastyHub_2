@@ -77,6 +77,15 @@ def update_recipe(old_recipe, new_recipe, by_admin=False):
         messagebox.showerror("Ошибка", f"Ошибка при обновлении рецепта: {str(e)}")
         return False
 
+# function for get all products from database
+def load_products():
+    response = send_request({
+        "action": "load_products",
+    })
+
+    if response.get("status") == "success":
+        pass
+
 def load_recipes(only_confirmed=True, by_name=None, by_ingredients=None):                             # temp method for check bug place
     response = send_request({
         "action": "load_recipes",
@@ -107,42 +116,6 @@ def load_recipes(only_confirmed=True, by_name=None, by_ingredients=None):       
             ))
 
         return recipes
-
-
-# def load_recipes(only_confirmed=True, by_name=None, by_ingredients=None):                             # its need refactoring
-#     response = send_request({
-#         "action": "load_recipes",
-#         "only_confirmed": only_confirmed,
-#         "by_name": by_name,
-#         "by_ingredients": by_ingredients
-#     })
-#     print(response)
-#     if response.get("status") == "success":
-#         recipes = []
-#         os.makedirs("recipe_images", exist_ok=True)
-#         for recipe_data in response.get("recipes", []):
-#             try:
-#                 picture_path = recipe_data['picture_path']
-#                 if recipe_data.get('image_data'):
-#                     image_path = os.path.join("recipe_images", picture_path)
-#                     with open(image_path, 'wb') as img_file:
-#                         img_file.write(base64.b64decode(recipe_data['image_data']))
-#                 recipes.append(Recipe(
-#                     id=recipe_data["id"],
-#                     name=recipe_data['name'],
-#                     description=recipe_data['description'],
-#                     cooking_time=recipe_data['cooking_time'],
-#                     picture_path=picture_path,
-#                     confirmed=recipe_data['confirmed'],
-#                     user_id=recipe_data['user_id'],
-#                     products=recipe_data['products']
-#                 ))
-#                 breakpoint()
-#             except Exception as e:
-#                 print(f"Error processing recipe {recipe_data.get('recipe_name', 'unknown')}: {e}")
-#                 continue
-#         return recipes
-#     return []
 
 def load_users():
     response = send_request({"action": "load_users"})
@@ -182,7 +155,7 @@ def copy_image(source_path, destination_folder="recipe_images"):
 
 def save_recipe(recipe):
     try:
-        image_path = recipe.picture_path()
+        image_path = recipe.picture_path
         if not os.path.exists(image_path):
             raise FileNotFoundError(f"Файл изображения не найден: {image_path}")
         img = Image.open(image_path)
@@ -192,14 +165,14 @@ def save_recipe(recipe):
         img.save(buffer, format="JPEG", quality=85)
         image_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
         recipe_data = {
-            "author_name": recipe.getAuthor(),
-            "recipe_name": recipe.getName(),
-            "description": recipe.getDescription(),
-            "cooking_time": recipe.getCookingTime(),
-            "products": ', '.join(recipe.getProductList()),
-            "image_name": os.path.basename(image_path),
+            "name": recipe.name,
+            "description": recipe.description,
+            "cooking_time": recipe.cooking_time,
+            "picture_path": os.path.basename(recipe.picture_path),
+            "confirmed": recipe.confirmed,
+            "user_name": recipe.user_name,
             "image_data": image_data,
-            "confirmed": recipe.getConfirmed()
+            "products": recipe.products
         }
         response = send_request({
             "action": "save_recipe",

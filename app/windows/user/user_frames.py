@@ -1,10 +1,11 @@
 import customtkinter as ctk
-from app.config import theme
 from tkinter import messagebox, filedialog
-from app.classes import Recipe, RecipeCard
 from PIL import Image, ImageTk
-from app.functions import save_recipe, load_recipes, update_recipe_by_id, EditableRecipeCard
 import os
+
+from app.config import theme
+from app.functions import save_recipe, load_recipes, load_products, update_recipe_by_id, EditableRecipeCard
+from app.classes import Recipe, RecipeCard
 
 # Класс основного фрейма приложения
 class MainFrame(ctk.CTkFrame):
@@ -139,15 +140,15 @@ class MainFrame(ctk.CTkFrame):
         # Очищаем контейнер перед добавлением новых карточек
         for widget in self.recipes_container.winfo_children():
             widget.destroy()
-
-        # Создаем карточки для каждого рецепта
-        for i, recipe in enumerate(self.recipes):
-            card = RecipeCard(
-                master=self.recipes_container,
-                recipe=recipe,
-                main_program=self.master
-            )
-            card.grid(row=i//5, column=i%5, padx=20, pady=10)
+        if self.recipes:
+            # Создаем карточки для каждого рецепта
+            for i, recipe in enumerate(self.recipes):
+                card = RecipeCard(
+                    master=self.recipes_container,
+                    recipe=recipe,
+                    main_program=self.master
+                )
+                card.grid(row=i//5, column=i%5, padx=20, pady=10)
 
     # Метод для поиска рецептов по параметрам
     def search_recipes(self):
@@ -172,6 +173,7 @@ class AddRecipeFrame(ctk.CTkFrame):
         self.recipe = recipe
         self.admin = admin
         self.selected_image_path = None
+        self.products = load_products()
 
         self.setup_add_recipe_frame()
 
@@ -380,15 +382,19 @@ class AddRecipeFrame(ctk.CTkFrame):
 
         return img.resize((new_width, new_height), Image.LANCZOS)
 
+    # method for get all products from server
+    def load_products(self):
+        pass
+
     # Метод отправки рецепта
     def send_recipe(self, update=False, by_admin=False):
         name = self.recipe_name_entry.get().strip().lower()
         try:
-            cocking_time = int(self.recipe_cocking_time_entry.get().strip())
+            cooking_time = int(self.recipe_cocking_time_entry.get().strip())
         except ValueError:
             messagebox.showerror("Ошибка", "Время приготовления должно быть целым числом")
 
-        ingredients = self.recipe_product_textbox.get('1.0', 'end').strip()
+        products = self.recipe_product_textbox.get('1.0', 'end').strip()
         description = self.recipe_description_textbox.get('1.0', 'end').strip()
         try:
             picture_path = self.selected_image_path
@@ -396,14 +402,23 @@ class AddRecipeFrame(ctk.CTkFrame):
             messagebox.showerror("Ошибка", "Выберите картинку для рецепта")
 
 
-        if name and cocking_time and ingredients and description and picture_path:
+        if name and cooking_time and products and description and picture_path:
             if self.recipe:
-                author = self.recipe.getAuthor()
+                author_name = self.recipe.user_name
             else:
-                author = self.master.user.username()
+                author_name = self.master.user.username
 
-            ingredients = [i.strip().lower() for i in ingredients.split(',')]
-            recipe = Recipe(author ,name, description, picture_path, cocking_time, ingredients)
+            products = [i.strip().lower() for i in products.split(',')]
+            recipe = Recipe(
+                None,
+                name=name,
+                description=description,
+                cooking_time=cooking_time,
+                picture_path=picture_path,
+                confirmed=1 if by_admin else 0,
+                user_name=author_name,
+                products=products
+            )
 
             # Сохраняем или заменяем существующий рецепт
             if update:
@@ -418,44 +433,6 @@ class AddRecipeFrame(ctk.CTkFrame):
             messagebox.showerror("Ошибка", "Вы не заполнили все поля")
 
         print("Вы отправили рецепт")
-
-        # # Метод отправки рецепта
-        # def send_recipe(self, update=False, by_admin=False):
-        #     name = self.recipe_name_entry.get().strip().lower()
-        #     try:
-        #         cocking_time = int(self.recipe_cocking_time_entry.get().strip())
-        #     except ValueError:
-        #         messagebox.showerror("Ошибка", "Время приготовления должно быть целым числом")
-        #
-        #     ingredients = self.recipe_product_textbox.get('1.0', 'end').strip()
-        #     description = self.recipe_description_textbox.get('1.0', 'end').strip()
-        #     try:
-        #         picture_path = self.selected_image_path
-        #     except:
-        #         messagebox.showerror("Ошибка", "Выберите картинку для рецепта")
-        #
-        #     if name and cocking_time and ingredients and description and picture_path:
-        #         if self.recipe:
-        #             author = self.recipe.getAuthor()
-        #         else:
-        #             author = self.master.user.getUsername()
-        #
-        #         ingredients = [i.strip().lower() for i in ingredients.split(',')]
-        #         recipe = Recipe(author, name, description, picture_path, cocking_time, ingredients)
-        #
-        #         # Сохраняем или заменяем существующий рецепт
-        #         if update:
-        #             update_recipe_by_id(self.recipe, recipe, by_admin=by_admin)
-        #         else:
-        #             save_recipe(recipe)
-        #
-        #         self.master.open_main_frame()
-        #
-        #         return
-        #     else:
-        #         messagebox.showerror("Ошибка", "Вы не заполнили все поля")
-        #
-        #     print("Вы отправили рецепт")
 
     def load_image_dialog(self):
         file_path = filedialog.askopenfilename(

@@ -6,7 +6,7 @@ from app.config import ICON_PATH
 
 # Основное окно приложения
 class MainApp(ctk.CTk):
-    def __init__(self, user=User("test_user", 0000, False)):
+    def __init__(self, user=User(0, 'developer', 0000)):
         super().__init__()
 
         self.user = user
@@ -28,7 +28,7 @@ class MainApp(ctk.CTk):
 
     # Метод открытия фрейма добавления рецепта
     def open_add_recipe_frame(self):
-        # Удаляем основной ферйм
+        # Удаляем основной фрейм
         self.main_frame.destroy()
         # Открываем фрейм добавления рецепта
         self.add_recipe_frame = AddRecipeFrame(self)
@@ -69,4 +69,4 @@ class MainApp(ctk.CTk):
         self.frames = {}
 
 if __name__ == "__main__":
-    main_app = MainApp()
+    MainApp().mainloop()
