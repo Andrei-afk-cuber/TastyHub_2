@@ -47,8 +47,6 @@ class Recipe(Base):
     def __repr__(self):
         return f"Recipe(id={self.id}, name={self.name}, user_id={self.user_id}...)"
 
-
-
 # product model
 class Product(Base):
     __tablename__ = "products"

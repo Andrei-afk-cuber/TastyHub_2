@@ -2,8 +2,6 @@
 import sqlite3
 import os
 import shutil
-# from app.classes import Recipe, User
-from app.classes import Recipe
 from tkinter import messagebox
 from PIL import Image
 import customtkinter as ctk

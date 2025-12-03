@@ -79,6 +79,10 @@ class Recipe:
     def confirmed(self):
         return self._confirmed
 
+    @confirmed.setter
+    def confirmed(self, value):
+        self._confirmed = value
+
     @property
     def user_name(self):
         return self._user_name
