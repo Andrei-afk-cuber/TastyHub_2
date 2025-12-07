@@ -480,6 +480,8 @@ class ShowRecipeFrame(ctk.CTkFrame):
         super().__init__(master)
         self.master = master
         self.recipe = recipe
+
+        self.configure(fg_color=theme['frame_background_color'])
         self.setup_show_recipe_frame()
 
     def setup_show_recipe_frame(self):
@@ -510,11 +512,13 @@ class ShowRecipeFrame(ctk.CTkFrame):
             master=self.show_recipe_frame,
             text=f"{self.recipe.name} by {self.recipe.user_name} ({self.recipe.cooking_time} мин.)",
             font=('Century Gothic', 24, 'bold'),
+            text_color=theme['text_color'],
         ).place(relx=0.5, rely=0.5, anchor=ctk.CENTER)
 
         # Контейнер для изображения
         self.image_frame = ctk.CTkFrame(
             master=self,
+            fg_color=theme['frame_background_color'],
         )
         self.image_frame.place(relx=0.5, rely=0.25, anchor=ctk.CENTER)
 
@@ -620,11 +624,12 @@ class UserProfileFrame(ctk.CTkFrame):
         self.master = master
         self.recipes = load_recipes(by_name=self.master.user.username, only_confirmed=False)
 
+        self.configure(fg_color=theme['frame_background_color'])
         self.setup_user_profile_frame()
 
     def setup_user_profile_frame(self):
         # Создаем фрейм сверху страницы
-        self.header_frame = ctk.CTkFrame(master=self, width=1270, height=50)
+        self.header_frame = ctk.CTkFrame(master=self, width=1270, height=50, fg_color=theme['background_color'])
         self.header_frame.place(relx=0.5, y=30, anchor=ctk.CENTER)
 
         # Кнопка возврата к основному фрейму
@@ -643,13 +648,15 @@ class UserProfileFrame(ctk.CTkFrame):
         ctk.CTkLabel(
             master=self.header_frame,
             text=f"Профиль пользователя {self.master.user.username}",
-            font=('Century Gothic', 24)
+            font=('Century Gothic', 24),
+            text_color=theme['text_color'],
         ).place(relx=0.5, rely=0.5, anchor=ctk.CENTER)
 
         ctk.CTkLabel(
             master=self,
             text="Ваши посты",
-            font=('Century Gothic', 24, 'bold')
+            font=('Century Gothic', 24, 'bold'),
+            text_color=theme['text_color'],
         ).place(relx=0.5, rely=0.1, anchor=ctk.CENTER)
 
         # Создаем фрейм для отображения карточек рецептов
@@ -657,7 +664,7 @@ class UserProfileFrame(ctk.CTkFrame):
             master=self,
             width=1200,
             height=500,
-            fg_color="transparent"
+            fg_color="transparent",
         )
         self.recipes_container.place(relx=0.5, rely=0.6, anchor=ctk.CENTER)
 
