@@ -500,7 +500,7 @@ class ShowRecipeFrame(ctk.CTkFrame):
             width=100,
             text="Назад",
             corner_radius=6,
-            fg_color=theme['frame_background_color'],
+            fg_color=theme['background_color'],
             text_color=theme['text_color'],
             hover_color=theme['hover_color'],
             command=self.master.open_main_frame
@@ -528,6 +528,7 @@ class ShowRecipeFrame(ctk.CTkFrame):
             text="",
             corner_radius=8,
             fg_color="transparent",
+            text_color=theme['text_color'],
         )
         self.image_label.pack(pady=10)
 
@@ -536,7 +537,7 @@ class ShowRecipeFrame(ctk.CTkFrame):
             master=self,
             text="Ингредиенты:",
             font=('Century Gothic', 24, 'bold'),
-            text_color="orange",
+            text_color="orange"
         ).place(relx=0.08, rely=0.15, anchor=ctk.CENTER)
 
         # Список ингредиентов
@@ -546,6 +547,7 @@ class ShowRecipeFrame(ctk.CTkFrame):
                 master=self,
                 text=f"• {ingredient}",
                 font=('Century Gothic', 20),
+                text_color=theme['text_color'],
             ).place(relx=0.015, y=start_y)
             start_y += 30
 
@@ -555,7 +557,7 @@ class ShowRecipeFrame(ctk.CTkFrame):
             width=1200,
             height=380,
             corner_radius=10,
-            fg_color="transparent",
+            fg_color="transparent"
         )
         self.recipe_description_frame.place(relx=0.5, rely=0.7, anchor=ctk.CENTER)
 
@@ -565,8 +567,9 @@ class ShowRecipeFrame(ctk.CTkFrame):
             height=300,
             font=('Century Gothic', 14),
             wrap="word",  # Перенос по словам
-            fg_color="transparent",
-            border_width=1,
+            fg_color=theme['background_color'],
+            text_color=theme['text_color'],
+            border_width=0,
             border_color="#e0e0e0",
             corner_radius=8,
             padx=10,
