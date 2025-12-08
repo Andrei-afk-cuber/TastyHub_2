@@ -108,9 +108,10 @@ class Recipe:
 
 class RecipeCard(ctk.CTkFrame):
     def __init__(self, master, recipe, main_program):
+        self.theme = main_program.theme
         super().__init__(
             master,
-            fg_color=theme['background_color'],
+            fg_color=self.theme['background_color'],
             corner_radius=10,
             border_width=0,
             border_color="#e0e0e0",
@@ -129,7 +130,7 @@ class RecipeCard(ctk.CTkFrame):
             text=recipe.name.capitalize(),
             font=("Arial", 14, "bold"),
             wraplength=180,
-            text_color=theme['text_color'],
+            text_color=self.theme['text_color'],
             height=40
         )
         self.name_label.grid(row=0, column=0, padx=10, pady=(10, 5), sticky="n")
@@ -142,7 +143,7 @@ class RecipeCard(ctk.CTkFrame):
             height=120,
             fg_color="transparent",
             corner_radius=8,
-            text_color=theme['text_color'],
+            text_color=self.theme['text_color'],
         )
         self.image_label.grid(row=1, column=0, padx=10, pady=5)
 
@@ -156,7 +157,7 @@ class RecipeCard(ctk.CTkFrame):
             wraplength=180,
             justify="left",
             height=60,
-            text_color=theme['text_color'],
+            text_color=self.theme['text_color'],
         )
         self.desc_label.grid(row=2, column=0, padx=10, pady=5)
 
@@ -166,9 +167,9 @@ class RecipeCard(ctk.CTkFrame):
             text="Подробнее",
             width=120,
             height=30,
-            fg_color=theme['frame_background_color'],
-            text_color=theme['text_color'],
-            hover_color=theme['hover_color'],
+            fg_color=self.theme['frame_background_color'],
+            text_color=self.theme['text_color'],
+            hover_color=self.theme['hover_color'],
             command=lambda:self.main_program.open_show_recipe_frame(recipe)
         )
         self.detail_btn.grid(row=3, column=0, pady=(5, 10))

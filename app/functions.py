@@ -231,9 +231,10 @@ def delete_user(user):
 
 class EditableRecipeCard(ctk.CTkFrame):
     def __init__(self, master, recipe, main_program):
+        self.theme = main_program.theme
         super().__init__(
             master,
-            fg_color=theme['background_color'],
+            fg_color=self.theme['background_color'],
             corner_radius=10,
             border_width=0,
             border_color="#e0e0e0",
@@ -251,7 +252,7 @@ class EditableRecipeCard(ctk.CTkFrame):
             text=recipe.name.capitalize(),
             font=("Arial", 14, "bold"),
             wraplength=180,
-            text_color=theme['text_color'],
+            text_color=self.theme['text_color'],
             height=40
         )
         self.name_label.grid(row=0, column=0, padx=10, pady=(10, 5), sticky="n")
@@ -265,7 +266,7 @@ class EditableRecipeCard(ctk.CTkFrame):
             width=180,
             height=120,
             fg_color="transparent",
-            text_color=theme['text_color'],
+            text_color=self.theme['text_color'],
             corner_radius=8
         )
         self.image_label.grid(row=1, column=0, padx=10, pady=5)
@@ -279,7 +280,7 @@ class EditableRecipeCard(ctk.CTkFrame):
             wraplength=180,
             justify="left",
             height=60,
-            text_color=theme['text_color'],
+            text_color=self.theme['text_color'],
         )
         self.desc_label.grid(row=2, column=0, padx=10, pady=5)
 
@@ -294,7 +295,7 @@ class EditableRecipeCard(ctk.CTkFrame):
             fg_color="#db0404",
             hover_color="#910000",
             # text_color="white",
-            text_color=theme['text_color'],
+            text_color=self.theme['text_color'],
             command=self.confirm_delete
         )
         self.delete_btn.pack(side="left", padx=5)
@@ -304,9 +305,9 @@ class EditableRecipeCard(ctk.CTkFrame):
             text="Редактировать",
             width=10,
             height=30,
-            fg_color=theme['frame_background_color'],
-            hover_color=theme['hover_color'],
-            text_color=theme['text_color'],
+            fg_color=self.theme['frame_background_color'],
+            hover_color=self.theme['hover_color'],
+            text_color=self.theme['text_color'],
             command=lambda: self.main_program.open_edit_recipe_frame(recipe)
         )
         self.edit_btn.pack(side="left", padx=5)
@@ -364,10 +365,10 @@ class AdminRecipeCard(ctk.CTkFrame):
     def __init__(self, master, recipe, main_program):
         super().__init__(
             master,
-            fg_color=theme['background_color'],
+            fg_color=self.theme['background_color'],
             corner_radius=10,
             border_width=2,
-            border_color=theme['hover_color'],
+            border_color=self.theme['hover_color'],
             width=1230,
             height=150
         )
@@ -380,7 +381,7 @@ class AdminRecipeCard(ctk.CTkFrame):
             text=recipe.name,
             font=("Arial", 14, "bold"),
             wraplength=180,
-            text_color=theme['text_color'],
+            text_color=self.theme['text_color'],
             height=40
         )
         self.name_label.place(relx=0.5, rely=0.15, anchor=ctk.CENTER)
@@ -407,7 +408,7 @@ class AdminRecipeCard(ctk.CTkFrame):
             wraplength=180,
             justify="left",
             height=60,
-            text_color=theme['text_color']
+            text_color=self.theme['text_color']
         )
         self.desc_label.place(rely=0.4, relx=0.2, anchor='w')
 
@@ -427,9 +428,9 @@ class AdminRecipeCard(ctk.CTkFrame):
             text="Редактировать",
             width=120,
             height=30,
-            fg_color=theme['frame_background_color'],
-            hover_color=theme['hover_color'],
-            text_color=theme['text_color'],
+            fg_color=self.theme['frame_background_color'],
+            hover_color=self.theme['hover_color'],
+            text_color=self.theme['text_color'],
             command=lambda: self.main_program.open_edit_recipe_frame(recipe)
         )
         self.edit_btn.place(x=1100, y=80, anchor='w')
@@ -514,10 +515,10 @@ class UserCard(ctk.CTkFrame):
     def __init__(self, master, user, main_program):
         super().__init__(
             master,
-            fg_color=theme['background_color'],
+            fg_color=self.theme['background_color'],
             corner_radius=10,
             border_width=2,
-            border_color=theme['hover_color'],
+            border_color=self.theme['hover_color'],
             width=1230,
             height=60
         )

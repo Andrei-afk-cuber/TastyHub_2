@@ -2,13 +2,14 @@ import customtkinter as ctk
 
 from app.windows.user.user_frames import MainFrame, AddRecipeFrame, ShowRecipeFrame, UserProfileFrame
 from app.classes import User
-from app.config import ICON_PATH, night_theme as theme
+from app.config import ICON_PATH, day_theme, night_theme
 
 # Основное окно приложения
 class MainApp(ctk.CTk):
-    def __init__(self, user=User(0, 'developer', 0000)):
+    def __init__(self, user=User(0, 'developer', 0000), theme=day_theme):
         super().__init__()
-        self.configure(fg_color=theme['frame_background_color'])
+        self.theme = theme
+        self.configure(fg_color=self.theme['frame_background_color'])
 
         self.user = user
 
@@ -70,4 +71,5 @@ class MainApp(ctk.CTk):
         self.frames = {}
 
 if __name__ == "__main__":
-    MainApp().mainloop()
+    chosen_theme=day_theme
+    MainApp(theme=chosen_theme).mainloop()

@@ -6,7 +6,7 @@ from app.config import ICON_PATH, night_theme, day_theme
 class LoginMainApp(tk.CTk):
     def __init__(self, user_program_class, admin_program_class,):
         super().__init__()
-        self.theme = day_theme
+        self.theme = night_theme
 
         self.user_program_class = user_program_class
         self.admin_program_class = admin_program_class
@@ -53,7 +53,7 @@ class LoginMainApp(tk.CTk):
         if user.admin():
             self.main_program = self.admin_program_class(user)
         else:
-            self.main_program = self.user_program_class(user)
+            self.main_program = self.user_program_class(user, self.theme)
 
         self.main_program.mainloop()
 
