@@ -188,7 +188,6 @@ class RecipeCard(ctk.CTkFrame):
             if os.path.exists(image_path):
                 img = Image.open(image_path)
 
-                # Ресайз с сохранением пропорций
                 width, height = 200, 140
                 img_ratio = img.width / img.height
                 frame_ratio = width / height

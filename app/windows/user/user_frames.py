@@ -3,8 +3,7 @@ from tkinter import messagebox, filedialog
 from PIL import Image, ImageTk
 import os
 
-from app.config import day_theme as theme
-from app.functions import save_recipe, load_recipes, load_products, update_recipe_by_id, EditableRecipeCard
+from app.functions import save_recipe, load_recipes, update_recipe_by_id, EditableRecipeCard
 from app.classes import Recipe, RecipeCard
 
 # Класс основного фрейма приложения
@@ -182,7 +181,7 @@ class AddRecipeFrame(ctk.CTkFrame):
         self.recipe = recipe
         self.admin = admin
         self.selected_image_path = None
-        self.products = load_products()
+        # self.products = load_products()
 
         self.configure(fg_color=self.theme['frame_background_color'])
         self.setup_add_recipe_frame()

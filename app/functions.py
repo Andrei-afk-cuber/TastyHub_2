@@ -11,9 +11,7 @@ import datetime
 import base64
 import io
 
-# from app.classes import Recipe, User
 from app.classes import Recipe
-from app.config import night_theme as theme
 from app.models.main import User
 from app.config import SERVER_HOST, SERVER_PORT
 
@@ -76,15 +74,6 @@ def update_recipe(old_recipe, new_recipe, by_admin=False):
         messagebox.showerror("Ошибка", f"Ошибка при обновлении рецепта: {str(e)}")
         return False
 
-# function for get all products from database
-def load_products():
-    response = send_request({
-        "action": "load_products",
-    })
-
-    if response.get("status") == "success":
-        pass
-
 def load_recipes(only_confirmed=True, by_name=None, by_ingredients=None, by_username=None):                             # temp method for check bug place
     response = send_request({
         "action": "load_recipes",
@@ -99,7 +88,6 @@ def load_recipes(only_confirmed=True, by_name=None, by_ingredients=None, by_user
 
         for recipe_data in response.get("recipes", []):
             picture_path = recipe_data['picture_path']
-
             if recipe_data.get('image_data'):
                 try:
                     image_path = os.path.join("recipe_images", picture_path)
