@@ -181,6 +181,10 @@ class RecipeCard(ctk.CTkFrame):
         try:
             image_path = os.path.join("recipe_images", self.recipe.picture_path)
 
+            # create folder if not exists
+            if not os.path.exists(image_path):
+                os.mkdir(image_path)
+
             if os.path.exists(image_path):
                 img = Image.open(image_path)
 
