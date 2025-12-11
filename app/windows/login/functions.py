@@ -1,11 +1,14 @@
+# libraries
 import socket
 import json
 from typing import Optional
 
+# user libraries
 from app.windows.login.classes import User
 from app.config import SERVER_HOST, SERVER_PORT
 
-def send_request(request):
+# function for send request
+def send_request(request: dict) -> dict:
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((SERVER_HOST, SERVER_PORT))

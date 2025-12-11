@@ -2,11 +2,9 @@ import customtkinter as ctk
 import os
 from PIL import ImageTk, Image
 
-from app.config import night_theme as theme
-
 # user data-class
 class User:
-    def __init__(self, id: int, username: str, password: str, admin: int=0, authorized: int=0, recipes: list=[]) -> None:
+    def __init__(self, id: int, username: str, password: str, admin: int=0, authorized: int=0, recipes: list =[]) -> None:
         self._id = id
         self._username = username
         self._password = password
@@ -14,6 +12,7 @@ class User:
         self._authorized = authorized
         self._recipes = recipes
 
+    # properties for get some fields
     @property
     def id(self) -> int:
         return self._id
@@ -38,6 +37,7 @@ class User:
     def recipes(self) -> list:
         return self._recipes
 
+    # redefine the method for output obj to console
     def __repr__(self):
         return (f"User(id={self._id}, name={self._username}, password={self._password}, admin={bool(self._admin)}, "
                 f"authorized={bool(self._authorized)}, recipes={self._recipes})")
@@ -45,7 +45,7 @@ class User:
 
 # recipe data-class
 class Recipe:
-    def __init__(self, id, name, description, cooking_time, picture_path, confirmed, user_name, products):
+    def __init__(self, id: int, name: str, description: str, cooking_time: int, picture_path: str, confirmed: bool, user_name: str, products: list) -> None:
         self._id = id
         self._name = name
         self._description = description
@@ -55,6 +55,7 @@ class Recipe:
         self._user_name = user_name
         self._products = products
 
+    # properties for get some fields
     @property
     def id(self):
         return self._id
@@ -91,6 +92,7 @@ class Recipe:
     def products(self):
         return self._products
 
+    # method for transform obj to dict
     def to_dict(self):
         return {
             'id': self._id,
@@ -103,11 +105,13 @@ class Recipe:
             'products': self.products
         }
 
+    # method for console output
     def __repr__(self):
         return f"Recipe(id={self._id}, name={self._name}, user_name={self._user_name}...)"
 
+# class for recipe card view
 class RecipeCard(ctk.CTkFrame):
-    def __init__(self, master, recipe, main_program):
+    def __init__(self, master, recipe, main_program) -> None:
         self.theme = main_program.theme
         self.language = main_program.language
         super().__init__(
@@ -177,7 +181,8 @@ class RecipeCard(ctk.CTkFrame):
 
         self.load_recipe_image()
 
-    def load_recipe_image(self):
+    # method for load recipe image
+    def load_recipe_image(self) -> None:
         try:
             image_path = os.path.join("recipe_images", self.recipe.picture_path)
 
@@ -211,6 +216,7 @@ class RecipeCard(ctk.CTkFrame):
                     text=self.language['image_is_not_found_error'],
                 )
         except Exception as e:
+            print(e)
             self.image_label.configure(
                 text=self.language['load_image_error'],
                 font=('Century Gothic', 14),

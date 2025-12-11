@@ -1,25 +1,24 @@
 import customtkinter as ctk
 from customtkinter import CTkLabel
-# from app.config import night_theme as theme
 from app.functions import load_users, load_recipes, AdminRecipeCard, UserCard
 
-# Класс основного фрейма приложения
+# Main frame
 class MainFrame(ctk.CTkFrame):
-    def __init__(self, master):
+    def __init__(self, master) -> None:
         super().__init__(master)
         self.master = master
         self.theme = master.theme
         self.language = master.language
         self.configure(fg_color=self.theme['frame_background_color'])
 
-        # Загружаем пользователей и рецепты из БД
+        # Load users and recipe from database
         self.users = None
         self.recipes = None
 
         self.setup_main_frame()
 
-    # Функция для отрисовки основного фрейма
-    def setup_main_frame(self):
+    # Method for set up main frame
+    def setup_main_frame(self) -> None:
         self.main_frame = ctk.CTkFrame(master=self, width=1270, height=50, fg_color=self.theme['background_color'])
         self.main_frame.place(relx=0.5, rely=0.05, anchor=ctk.CENTER)
 
@@ -31,7 +30,7 @@ class MainFrame(ctk.CTkFrame):
         )
         self.text.place(x=90, y=45)
 
-        # Кнопка выхода
+        # exit button
         self.exit_button = ctk.CTkButton(
             master=self.main_frame,
             width=100,
@@ -44,7 +43,7 @@ class MainFrame(ctk.CTkFrame):
         )
         self.exit_button.place(x=1160, y=10)
 
-        # Кнопка для просмотра пользователей
+        # User check button
         self.users_check_button = ctk.CTkButton(
             master=self.main_frame,
             width=100,
@@ -57,7 +56,7 @@ class MainFrame(ctk.CTkFrame):
         )
         self.users_check_button.place(relx=0.4, y=10)
 
-        # Кнопка для просмотра рецептов
+        # Recipes check button
         self.recipes_check_button = ctk.CTkButton(
             master=self.main_frame,
             width=100,
@@ -69,7 +68,7 @@ class MainFrame(ctk.CTkFrame):
         )
         self.recipes_check_button.place(relx=0.5, y=10)
 
-        # Контейнер для размещения на нем информации
+        # Data container for recipes view
         self.data_container = ctk.CTkScrollableFrame(
             master=self,
             width=1250,
@@ -78,19 +77,17 @@ class MainFrame(ctk.CTkFrame):
         )
         self.data_container.place(relx=0.5, rely=0.55, anchor=ctk.CENTER)
 
-    # Функция для закрытия программы
-    def close_program(self):
+    # Method for close program
+    def close_program(self) -> None:
         self.master.destroy()
 
-    def display_users(self):
-        # Загружаем пользователей из БД
+    # Method for display users
+    def display_users(self) -> None:
         self.users = load_users()
 
-        # Очищаем контейнер, перед добавлением новых карточек
         for widget in self.data_container.winfo_children():
             widget.destroy()
 
-        # Создаем карточки для каждого пользователя
         for i, user in enumerate(self.users):
             card = UserCard(
                 master=self.data_container,
@@ -99,17 +96,14 @@ class MainFrame(ctk.CTkFrame):
             )
             card.grid(row=i, column=0, padx=10, pady=5, sticky="ew")
 
-    # Метод для отображения рецептов
-    def display_recipes(self):
-        # Загружаем рецепты из БД
+    # Method for show recipes
+    def display_recipes(self) -> None:
         self.recipes = load_recipes(only_confirmed=False)
 
-        # Очищаем контейнер, перед добавлением новых карточек
         for widget in self.data_container.winfo_children():
             widget.destroy()
 
         if self.recipes:
-            # Создаем карточки для каждого рецепта
             for i, recipe in enumerate(self.recipes):
                 card = AdminRecipeCard(
                     master=self.data_container,

@@ -7,6 +7,7 @@ ICON_PATH = PROJECT_ROOT / 'app' / 'images' / 'icon.ico'
 SERVER_HOST = "127.0.0.1"
 SERVER_PORT = 65432
 
+# theme dicts
 day_theme = {
     'background_color':'#ffcca1', # foreground color
     'frame_background_color':'#ffe0c6', # frame bg color

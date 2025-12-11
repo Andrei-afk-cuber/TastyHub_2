@@ -1,19 +1,22 @@
-class User(object):
-    def __init__(self, username, password, admin=False, authorized=False, id=0):
+# class User
+class User:
+    def __init__(self, username: str, password: str, admin: bool=False, authorized: bool=False, id: int=0) -> None:
         self.__id = id
         self.__username = username
         self.__password = password
         self.__admin = admin
         self.__authorized = authorized
 
-    def getId(self):
+    @property
+    def id(self):
         return self.__id
 
     @property
     def username(self):
         return self.__username
 
-    def getPassword(self):
+    @property
+    def password(self):
         return self.__password
 
     def admin(self):

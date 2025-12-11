@@ -10,12 +10,15 @@ import json
 import datetime
 import base64
 import io
+from typing import List, Optional
 
+# importing my addictions
 from app.classes import Recipe
 from app.models.main import User
 from app.config import SERVER_HOST, SERVER_PORT
 
-def send_request(request):
+# function for create requests to server
+def send_request(request: dict) -> dict:
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(10)
@@ -35,46 +38,19 @@ def send_request(request):
         print(f"Network error: {e}")
         return {"status": "error", "message": "Network error"}
 
+# function for get database connection
 def get_database_connection():
     db = sqlite3.connect("database.db")
     cursor = db.cursor()
     return db, cursor
 
+# close database connection
 def close_database_connection(db):
     if db:
         db.close()
 
-def update_recipe(old_recipe, new_recipe, by_admin=False):
-    try:
-        image_data = None
-        image_name = old_recipe.picture_path
-        if old_recipe.picture_path != new_recipe.picture_path:
-            image_path = new_recipe.picture_path
-            with open(image_path, 'rb') as img_file:
-                image_data = base64.b64encode(img_file.read()).decode('utf-8')
-            image_name = os.path.basename(image_path)
-        recipe_data = {
-            "id": old_recipe.getId(),
-            "author_name": new_recipe.getAuthor(),
-            "recipe_name": new_recipe.getName(),
-            "description": new_recipe.getDescription(),
-            "cooking_time": new_recipe.getCookingTime(),
-            "products": ', '.join(new_recipe.getProductList()),
-            "image_name": image_name,
-            "image_data": image_data,
-            "old_image": old_recipe.picture_path,
-        }
-        response = send_request({
-            "action": "update_recipe",
-            "recipe_data": recipe_data,
-            "by_admin": by_admin
-        })
-        return response.get("status") == "success"
-    except Exception as e:
-        messagebox.showerror("Ошибка", f"Ошибка при обновлении рецепта: {str(e)}")
-        return False
-
-def load_recipes(only_confirmed=True, by_name=None, by_ingredients=None, by_username=None):                             # temp method for check bug place
+# function for load recipes from server
+def load_recipes(only_confirmed: bool=True, by_name: str=None, by_ingredients: list=None, by_username: str=None):                             # temp method for check bug place
     response = send_request({
         "action": "load_recipes",
         "only_confirmed": only_confirmed,
@@ -112,7 +88,8 @@ def load_recipes(only_confirmed=True, by_name=None, by_ingredients=None, by_user
 
         return recipes
 
-def load_users():
+# load users data from server
+def load_users() -> List[User]:
     response = send_request({"action": "load_users"})
     if response.get("status") == "success":
         users = []
@@ -131,7 +108,8 @@ def load_users():
         return users
     return []
 
-def copy_image(source_path, destination_folder="recipe_images"):
+# function for copy image
+def copy_image(source_path: str, destination_folder: str="recipe_images") -> Optional[str]:
     try:
         if not os.path.exists(source_path):
             print(f"Ошибка: файла {source_path} не существует")
@@ -148,7 +126,8 @@ def copy_image(source_path, destination_folder="recipe_images"):
         print(f"Ошибка при копировании: {e}")
         return None
 
-def save_recipe(recipe):
+# function for save recipe
+def save_recipe(recipe: Recipe) -> Optional[int]:
     try:
         image_path = recipe.picture_path
         if not os.path.exists(image_path):
@@ -183,26 +162,29 @@ def save_recipe(recipe):
         return None
 
 # method for update recipe
-def update_recipe_by_id(old_recipe, new_recipe, by_admin=False):            # 1. Delete recipe 2. Save recipe as new with exsisiting id
+def update_recipe_by_id(old_recipe, new_recipe, by_admin: bool=False):
     delete_recipe(old_recipe)
     new_recipe.confirmed = int(by_admin)
     save_recipe(new_recipe)
 
-def delete_recipe(recipe):
+# delete recipe function
+def delete_recipe(recipe: Recipe) -> bool:
     response = send_request({
         "action": "delete_recipe",
         "recipe_id": recipe.id
     })
     return response.get("status") == "success"
 
-def accept_user(user):
+# accept user function
+def accept_user(user: User) -> bool:
     response = send_request({
         "action": "activate_user",
         "user_id": user.id
     })
     return response.get("status") == "success"
 
-def grant_admin_privileges(user):
+# function for grant admin privileges to user by id
+def grant_admin_privileges(user: User) -> bool:
     accept_user(user)
     response = send_request({
         "action": "grant_admin_privileges",
@@ -210,21 +192,23 @@ def grant_admin_privileges(user):
     })
     return response.get("status") == "success"
 
-def delete_user(user):
+# function for deleting user
+def delete_user(user: User) -> bool:
     response = send_request({
         "action": "delete_user",
         "user_id": user.id
     })
     return response.get("status") == "success"
 
-def json_to_dict(filename):
+# transform json to dict function
+def json_to_dict(filename: str) -> dict:
     with open(filename, encoding="utf-8") as json_file:
         data = json.load(json_file)
 
     return data
 
 class EditableRecipeCard(ctk.CTkFrame):
-    def __init__(self, master, recipe, main_program):
+    def __init__(self, master, recipe, main_program) -> None:
         self.theme = main_program.theme
         self.language = main_program.language
         super().__init__(
@@ -309,7 +293,8 @@ class EditableRecipeCard(ctk.CTkFrame):
 
         self.load_recipe_image()
 
-    def load_recipe_image(self):
+    # method for load recipe image
+    def load_recipe_image(self) -> None:
         try:
             image_path = os.path.join("recipe_images", self.recipe.picture_path)
             if os.path.exists(image_path):
@@ -333,7 +318,8 @@ class EditableRecipeCard(ctk.CTkFrame):
                 text_color="red"
             )
 
-    def confirm_delete(self):
+    # function for create window for confirmation recipe deleting
+    def confirm_delete(self) -> None:
         answer = messagebox.askyesno(
             self.language['accepting'],
             self.language['delete_recipe_accept'] + self.recipe.name,
@@ -349,15 +335,17 @@ class EditableRecipeCard(ctk.CTkFrame):
             else:
                 messagebox.showerror(self.language['error'], self.language['delete_recipe_error'], parent=self)
 
-    def delete_recipe(self):
+    # create request for delete recipe
+    def delete_recipe(self) -> bool:
         response = send_request({
             'action': 'delete_recipe',
             'recipe_id': self.recipe.id
         })
         return response.get('status') == 'success'
 
+# recipe card class for admin program
 class AdminRecipeCard(ctk.CTkFrame):
-    def __init__(self, master, recipe, main_program):
+    def __init__(self, master, recipe, main_program) -> None:
         self.theme = main_program.theme
         self.language = main_program.language
         super().__init__(
@@ -441,7 +429,8 @@ class AdminRecipeCard(ctk.CTkFrame):
 
         self.load_recipe_image()
 
-    def load_recipe_image(self):
+    # method for load recipe image
+    def load_recipe_image(self) -> None:
         try:
             image_path = os.path.join("recipe_images", self.recipe.picture_path)
             if os.path.exists(image_path):
@@ -464,7 +453,8 @@ class AdminRecipeCard(ctk.CTkFrame):
                 text_color="red"
             )
 
-    def confirm_delete(self):
+    # method for confirm recipe delete
+    def confirm_delete(self) -> None:
         answer = messagebox.askyesno(
             self.language['accepting'],
             self.language['delete_recipe_accept'] + self.recipe.name,
@@ -480,10 +470,10 @@ class AdminRecipeCard(ctk.CTkFrame):
             else:
                 messagebox.showerror(self.lanugage['error'], self.language['delete_recipe_error'], parent=self)
 
-    def delete_recipe(self):
+    def delete_recipe(self) -> None:
         try:
             db, cursor = get_database_connection()
-            recipe_id = self.recipe.getId()
+            recipe_id = self.recipe.id
             cursor.execute("DELETE FROM recipes WHERE id = ?", (recipe_id,))
             db.commit()
             if hasattr(self, 'ctk_image'):
@@ -507,8 +497,9 @@ class AdminRecipeCard(ctk.CTkFrame):
             close_database_connection(db)
             self.main_program.main_frame.display_recipes()
 
+# class for user card
 class UserCard(ctk.CTkFrame):
-    def __init__(self, master, user, main_program):
+    def __init__(self, master, user: User, main_program) -> None:
         self.theme = main_program.theme
         self.language = main_program.language
         super().__init__(
@@ -571,7 +562,8 @@ class UserCard(ctk.CTkFrame):
             )
             self.set_admin_button.place(rely=0.5, relx=0.6, anchor="w")
 
-    def confirm_user_confirm(self):
+    # method for confirm user status
+    def confirm_user_confirm(self) -> None:
         answer = messagebox.askyesno(
             self.language['verification_confirmation'],
             self.language['accept_verification'],
@@ -581,7 +573,8 @@ class UserCard(ctk.CTkFrame):
             accept_user(self.user)
             self.main_program.main_frame.display_users()
 
-    def confirm_user_admin(self):
+    # method for grant admin privileges
+    def confirm_user_admin(self) -> None:
         answer = messagebox.askyesno(
             self.language['accepting'],
             self.language['admin_confirmation'],
@@ -590,7 +583,8 @@ class UserCard(ctk.CTkFrame):
             grant_admin_privileges(self.user)
             self.main_program.main_frame.display_users()
 
-    def confirm_user_delete(self):
+    # method for create confirm user window
+    def confirm_user_delete(self) -> None:
         answer = messagebox.askyesno(
             self.language['accepting'],
             self.language['user_deleting_confirmation'],
@@ -599,7 +593,3 @@ class UserCard(ctk.CTkFrame):
         if answer:
             delete_user(self.user)
             self.main_program.main_frame.display_users()
-
-# debug
-if __name__ == '__main__':
-    pass

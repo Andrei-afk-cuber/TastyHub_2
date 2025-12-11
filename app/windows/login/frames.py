@@ -1,14 +1,16 @@
+# libraries
 import customtkinter as ctk
 from customtkinter import CTkLabel
 from tkinter import messagebox
 
+# user libraries
 from .functions import toggle_password, check_login, register_user
 from app.config import night_theme, day_theme
 from app.functions import json_to_dict
 
-# Класс основного фрейма приложения
+# Main frame class
 class MainFrame(ctk.CTkFrame):
-    def __init__(self, master):
+    def __init__(self, master) -> None:
         super().__init__(master)
         self.master = master
         self.language = master.language
@@ -16,9 +18,8 @@ class MainFrame(ctk.CTkFrame):
         self.configure(fg_color=self.theme['background_color'])
         self.setup_login_frame()
 
-    # Функция для отрисовки основного фрейма
-    def setup_login_frame(self):
-        # Создание фрейма входа в аккаунт
+    # Main frame set up method
+    def setup_login_frame(self) -> None:
         self.login_frame = ctk.CTkFrame(master=self, width=320, height=380, fg_color=self.theme['frame_background_color'])
         self.login_frame.place(relx=0.5, rely=0.5, anchor=ctk.CENTER)
 
@@ -130,28 +131,22 @@ class MainFrame(ctk.CTkFrame):
         )
         self.change_language_button.place(relx=0.12, rely=0.06, anchor=ctk.CENTER)
 
-    # Функция для проверки пароля и логина
-    def check_login_credentials(self):
-        # Получаем из полей ввода логин и пароль
+    # Function for login check
+    def check_login_credentials(self) -> None:
         username = self.u_block.get()
         password = self.p_block.get()
 
-        # Вызов функции check_login
         user = check_login(username, password)
 
-        # Если пользователь был успешно создан
         if user and user.isAuthorized():
             self.master.open_main_program(user)
-        # Если пользователь существует, но его аккаунт не подтвержден
         elif user and not user.isAuthorized():
             messagebox.showinfo(self.language['wait'], self.language['user_is_not_confirmed_message'])
-        # Пользователь не существует
         else:
-            # Неуспешный логин
             self.error_label.configure(text=self.language['incorrect_password_error'])
 
     # method for change theme color
-    def change_theme_color(self):
+    def change_theme_color(self) -> None:
         if self.master.theme == day_theme:
             self.master.theme = night_theme
         else:
@@ -162,7 +157,7 @@ class MainFrame(ctk.CTkFrame):
         self.master.open_main_frame()
 
     # method for change language
-    def change_language(self, language):
+    def change_language(self, language: str) -> None:
         if language == 'Русский':
             new_language = json_to_dict("app/locales/english.json")
             self.master.language = new_language
@@ -173,9 +168,9 @@ class MainFrame(ctk.CTkFrame):
         self.destroy()
         self.master.open_main_frame()
 
-# Класс фрейма регистрации
+# Registration frame
 class RegistrationFrame(ctk.CTkFrame):
-    def __init__(self, master):
+    def __init__(self, master) -> None:
         super().__init__(master)
         self.master = master
         self.language = master.language
@@ -184,8 +179,8 @@ class RegistrationFrame(ctk.CTkFrame):
         self.configure(fg_color=self.theme['background_color'])
         self.setup_register_frame()
 
-    # Метод отрисовки фрейма регистрации
-    def setup_register_frame(self):
+    # Method for set up main registration frame
+    def setup_register_frame(self) -> None:
         self.master.change_title(self.master.language['registration'])
         # Create the registration frame
         self.registration_frame = ctk.CTkFrame(
@@ -270,8 +265,8 @@ class RegistrationFrame(ctk.CTkFrame):
         )
         self.register_button.place(relx=0.5, y=300, anchor=ctk.CENTER)
 
-    # Метод для регистрации нового пользователя
-    def new_user_data(self):
+    # New user registration method
+    def new_user_data(self) -> None:
         username = self.username_entry.get()
         password = self.p_block.get()
 
