@@ -1,6 +1,6 @@
 # Tasty Hub
 ## Description
-Tasty Hub - это серверная часть платформы для обмена рецептами. Она необходима для работы приложения. Она обеспечивает основную бизнес-логику и позволяет клиенту взаимодействовать с базой данных. 
+This is the client side of the TastyHub application. It is a GUI application with which the user can make posts, edit them and delete them. To work, the user must register, after which the administrator must approve it. After approval, the user can start posting their recipes. Each recipe must also be approved by the administrator, after which it will be displayed to all users.
 ## Installation
 The server can be installed from this repository:
 ```commandline
