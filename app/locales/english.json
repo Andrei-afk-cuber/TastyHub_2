@@ -57,5 +57,6 @@
   "verification_confirmation": "Verification confirmation",
   "user_deleting_confirmation": "Are you sure you want to delete user?",
   "accept_verification": "Are you sure you want to cofirm user?",
-  "admin_confirmation": "Are you sure you want grant admin privileges to this user?"
+  "admin_confirmation": "Are you sure you want grant admin privileges to this user?",
+  "about": "About"
 }

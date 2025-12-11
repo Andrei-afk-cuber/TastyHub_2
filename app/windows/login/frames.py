@@ -131,6 +131,18 @@ class MainFrame(ctk.CTkFrame):
         )
         self.change_language_button.place(relx=0.12, rely=0.06, anchor=ctk.CENTER)
 
+        # button for get information about authors
+        self.about_button = ctk.CTkButton(
+            self.login_frame,
+            width=120,
+            text=self.language['about'],
+            fg_color=self.theme['background_color'],
+            text_color=self.theme['text_color'],
+            hover_color=self.theme['hover_color'],
+            command=self.master.open_about_frame
+        )
+        self.about_button.place(relx=0.5, y=340, anchor=ctk.CENTER)
+
     # Function for login check
     def check_login_credentials(self) -> None:
         username = self.u_block.get()
@@ -167,6 +179,55 @@ class MainFrame(ctk.CTkFrame):
 
         self.destroy()
         self.master.open_main_frame()
+
+class AboutFrame(ctk.CTkFrame):
+    def __init__(self, master) -> None:
+        super().__init__(master)
+        self.master = master
+        self.language = master.language
+        self.theme = master.theme
+
+        self.configure(fg_color=self.theme['background_color'])
+        self.setup_register_frame()
+
+    # Method for set up main registration frame
+    def setup_register_frame(self) -> None:
+        self.master.change_title(self.master.language['registration'])
+        # Create the registration frame
+        self.about_frame = ctk.CTkFrame(
+            master=self,
+            width=320,
+            height=380,
+            fg_color=self.theme['frame_background_color'],
+        )
+        self.about_frame.place(relx=0.5, rely=0.5, anchor=ctk.CENTER)
+
+        self.back_button = ctk.CTkButton(
+            master=self,
+            width=30,
+            height=30,
+            text=self.language['back'],
+            corner_radius=6,
+            fg_color=self.theme['frame_background_color'],
+            text_color=self.theme['text_color'],
+            hover_color=self.theme['hover_color'],
+            command=self.master.open_main_frame
+        )
+        self.back_button.place(x=10, y=10)
+
+        self.about_label = ctk.CTkLabel(
+            master=self,
+            text_color=self.theme['text_color'],
+            font=('Century Gothic', 13, 'bold'),
+            bg_color=self.theme['frame_background_color'],
+            text="TastyHub - платформа обмена рецепта-\nми. "
+                 "Это клиент-серверное приложение,\n разработаное "
+                 "для обмена рецептами меж-\nду пользователями."
+                 " Программа разработана \nстудентами БНТУ:\n"
+                 "Лях Андрей Игоревич гр. 10701323\n"
+                 "Куцко Владислав Витальевич гр. 10701123",
+        )
+        self.about_label.place(relx=0.5, rely=0.3, anchor=ctk.CENTER)
 
 # Registration frame
 class RegistrationFrame(ctk.CTkFrame):

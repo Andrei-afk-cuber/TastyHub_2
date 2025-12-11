@@ -2,7 +2,7 @@
 import customtkinter as tk
 
 # importing user modules
-from app.windows.login.frames import MainFrame, RegistrationFrame
+from app.windows.login.frames import MainFrame, RegistrationFrame, AboutFrame
 from app.config import ICON_PATH, day_theme
 from app.functions import json_to_dict
 
@@ -43,6 +43,13 @@ class LoginMainApp(tk.CTk):
         self.change_title(self.language['authorization'])
         self.main_frame = MainFrame(self)
         self.main_frame.pack(fill="both", expand=True)
+
+    # Open about frame
+    def open_about_frame(self) -> None:
+        self.main_frame.destroy()
+        self.about_frame = AboutFrame(self)
+        self.frames['about_frame'] = self.about_frame
+        self.about_frame.pack(expand=True, fill="both")
 
     def open_main_program(self, user) -> None:
         self.destroy()
