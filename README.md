@@ -1,6 +1,6 @@
 # Tasty Hub
 ## Description
-Tasty Hub is the server part of the recipe exchange platform. It is necessary for the application to work. It provides the basic business logic and allows the client to interact with the database. The server is based on the MVC architecture. The model is represented by ORM models that allow you to interact with records from the database, as with OOP objects. The controller is represented by a server class that is built on a socket to interact with the client, the controller is represented by the client.
+This is the client side of the TastyHub application. It is a GUI application with which the user can make posts, edit them and delete them. To work, the user must register, after which the administrator must approve it. After approval, the user can start posting their recipes. Each recipe must also be approved by the administrator, after which it will be displayed to all users.
 ## Installation
 The server can be installed from this repository:
 ```commandline
