@@ -623,7 +623,7 @@ class UserProfileFrame(ctk.CTkFrame):
         self.master = master
         self.theme = master.theme
         self.language = master.language
-        self.recipes = load_recipes(by_name=self.master.user.username, only_confirmed=False)
+        self.recipes = load_recipes(by_username=self.master.user.username, only_confirmed=False)
 
         self.configure(fg_color=self.theme['frame_background_color'])
         self.setup_user_profile_frame()
@@ -680,10 +680,11 @@ class UserProfileFrame(ctk.CTkFrame):
         for widget in self.recipes_container.winfo_children():
             widget.destroy()
 
-        for i, recipe in enumerate(self.recipes):
-            card = EditableRecipeCard(
-                master=self.recipes_container,
-                recipe=recipe,
-                main_program=self.master
-            )
-            card.grid(row=i // 5, column=i % 5, padx=5, pady=10)
+        if self.recipes:
+            for i, recipe in enumerate(self.recipes):
+                card = EditableRecipeCard(
+                    master=self.recipes_container,
+                    recipe=recipe,
+                    main_program=self.master
+                )
+                card.grid(row=i // 5, column=i % 5, padx=5, pady=10)
